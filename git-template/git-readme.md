@@ -54,14 +54,23 @@ echo "$new_message" > "$message_file"
 ### hooks/pre-commit
 
 ```sh
-
 #!/bin/sh
+# 除外する相対パスのファイルやディレクトリをリスト化
+EXCLUDE_PATHS=("git-template/git-readme.md")
 
-GREP_RESULT=$(git diff --cached | grep KEY | grep AKIA)
+# 除外コマンドを組み立てる
+EXCLUDE_CMD=""
+for path in "${EXCLUDE_PATHS[@]}"; do
+    EXCLUDE_CMD="$EXCLUDE_CMD -v $path "
+done
 
-if [ -n "${GREP_RESULT}" ]; then
+# ステージされた変更を取得し、指定されたファイルを除外しつつ、KEY と AKIA を含む行を検索
+GREP_RESULT=$(git diff --cached --name-only | eval "grep $EXCLUDE_CMD" | xargs -I {} git diff --cached {} | grep KEY | grep AKIA)
+
+# 結果が見つかった場合
+if [ -n "$GREP_RESULT" ]; then
     echo 'AWS_ACCESS_KEY might be in this index. Please check with git diff --cached'
-    echo "${GREP_RESULT}"
+    echo "$GREP_RESULT"
     exit 1
 fi
 ```
