@@ -74,3 +74,7 @@ if [ -n "$GREP_RESULT" ]; then
     exit 1
 fi
 ```
+
+## 全てのリポジトリに適用する
+
+[globalなgit-hooksを設定して、すべてのリポジトリで共有のhooksを使う](https://qiita.com/ik-fib/items/55edad2e5f5f06b3ddd1)
