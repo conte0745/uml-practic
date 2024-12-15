@@ -108,7 +108,6 @@ fi
 
 [globalなgit-hooksを設定して、すべてのリポジトリで共有のhooksを使う](https://qiita.com/ik-fib/items/55edad2e5f5f06b3ddd1)
 
-
 ## 個別のリポジトリは無視してグローバルのhooksのみ処理
 
 ```sh
@@ -116,5 +115,6 @@ cp -r .git/hooks ~/.config/git/hooks
 ```
 
 ```gitconfig
-hooksPath = ~/.config/git/hooks
+[core]
+    hooksPath = ~/.config/git/hooks
 ```
