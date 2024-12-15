@@ -1,0 +1,133 @@
+@startuml クラス図
+title クラス図
+
+class User {
+    user_id
+    company_id
+    user_name
+    password
+    address
+    role
+    authority
+}
+
+note left of User
+role = {Student, Teacher}
+end note
+
+note right of User
+authority = {admin, member}
+end note
+
+class Student {
+    user_id
+    credit_number
+    security_cd
+}
+
+class Teacher {
+    user_id
+    bank_number
+}
+
+class Company {
+    company_id
+    company_name
+}
+
+class Course {
+    course_id
+    course_title
+    course_description
+    teach_user_id
+    amount_of_money
+}
+
+class Section {
+    course_id
+    section_id
+    section_title
+    section_description
+}
+
+class Lesson {
+    section_id
+    lesson_id
+    lesson_title
+    lesson_description
+    update_date_at
+}
+
+class StudentBuysCourse {
+    user_id
+    course_id
+    coupon_cd
+    amount_of_money
+    bought_date
+}
+
+class StudentTakesInstruction {
+    user_id
+    instruction_type
+    instruction_id
+    start_date
+    complete_date
+}
+
+note bottom of StudentTakesInstruction
+instruction_type = {Course, Section, Lesson}
+instruction_id = {course_id, section_id, lesson_id}
+end note
+
+class Coupon {
+    coupon_cd
+    coupon_name
+    coupon_description
+    coupon_reduced_price
+    coupon_reduced_percent
+    coupon_max_apply
+    coupon_start_date
+    coupon_end_date
+    course_id
+}
+
+class StudentHasCoupon {
+    coupon_cd
+    user_id
+    is_used
+}
+
+class TransferMoneyToBank {
+    user_id
+    transfer_datetime
+    amount_of_money
+}
+
+' 継承
+User <|-- Student
+User <|-- Teacher
+' コンポジション
+Company *-- User
+' 1対N(受講生は複数のコース・セクション・レッスンを開始することができる)
+Student "1" --> "0..*" StudentTakesInstruction
+' 1対N(コース・セクション・レッスンは複数の受講生が受講することができる)
+Course "1" --> "0..*" StudentTakesInstruction
+' 1対N(コースは一人の講師が作成する)
+Teacher "1" --> "0..*" Course
+' 集約(コースはセクションを持つ)
+Course "1" o-- "1..*" Section
+' 集約(セクションはレッスンを持つ)
+Section "1" o-- "1..*" Lesson
+' 1対N(コースはクーポンを持つ)
+Course  "0" --> "0..*" Coupon
+' 1対N(受講生はクーポンを持つ)
+Student "1" --> "0..*" StudentHasCoupon
+' 1対N(クーポンは受講生を持つ)
+Coupon  "1" --> "0..*" StudentHasCoupon
+' N対N(受講生はコースを買う)
+Student "1" --> "0..*" StudentBuysCourse
+Course "1" --> "0..*" StudentBuysCourse
+' 1対N(運営会社は講師に受講料を銀行口座に支払う)
+Teacher "1" --> "0..*" TransferMoneyToBank
+
+@enduml

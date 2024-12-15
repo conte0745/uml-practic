@@ -1,0 +1,67 @@
+@startuml アクティビティ図
+title アクティビティ図
+start
+
+:ログイン画面初期表示;
+:IDとパスワードを入力;
+
+repeat
+    if (IDとパスワードが正しい) Then (Yes)
+        break
+    else (no)
+        :エラーメッセージを表示;
+        :ログイン画面にリダイレクト;
+    endif
+repeat while (IDとパスワードを入力)
+
+:ログイン成功;
+
+stop
+
+start
+
+:コース購入画面表示;
+repeat
+    if (クーポンを持っているか?) then (No)
+        break
+    else (Yes)
+        :クーポン一覧を取得して表示;
+        if (クーポンを選択したか?) then (Yes)
+            :有効な日付を検索;
+            :有効な枚数を検索;
+            if (クーポンが有効期限内かつ利用上限以下か?) then (Yes)
+                :割引処理;
+            else (No)
+                :エラー表示;
+            endif
+        endif
+    endif
+
+repeat while (エラー) is (あり)
+
+:コース料金を表示;
+
+while (コース購入確認画面表示) is (エラーあり)
+    if (購入情報を持っているか?) then (Yes)
+        :購入確認画面に遷移;
+        :購入処理;
+        if (購入に成功したか?) then (Yes)
+            break
+        else (No)
+            :購入中止;
+            :エラーを表示;
+        endif
+    else (No)
+        :個人情報入力画面に遷移;
+        :個人情報を入力;
+        :個人情報登録完了;
+        note  left
+            個人情報登録画面
+        end note
+    endif
+endwhile (エラーなし)
+
+:購入完了;
+
+stop
+@enduml

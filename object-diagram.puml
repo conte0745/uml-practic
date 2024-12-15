@@ -1,0 +1,141 @@
+@startuml オブジェクト図
+title オブジェクト図
+
+object user1 {
+    user_id = 1
+    company_id = 101
+    user_name = "太郎"
+    password = "password"
+    address = "東京都..."
+    role = "Student"
+    authority = Standard
+}
+
+object user2 {
+    user_id = 2
+    company_id = 101
+    user_name = "二郎"
+    password = "password"
+    address = "東京都..."
+    role = "Student"
+    authority = Admin
+}
+
+object user3 {
+    user_id = 3
+    company_id = 102
+    user_name = "花子"
+    password = "password"
+    address = "愛知県..."
+    role = "Teacher"
+    authority = Admin
+}
+
+object student1 {
+    user_id = 1
+    credit_number = "123456"
+    security_cd = "7890"
+}
+
+object teacher1 {
+    user_id = 3
+    bank_number = "987654321"
+}
+
+object company1 {
+    company_id = 101
+    company_name = "受講_会社"
+}
+
+object company2 {
+    company_id = 102
+    company_name = "教育_会社"
+}
+
+object course1 {
+    course_id = 201
+    course_title = "Javaの初学者向け講習"
+    course_description = "Javaの初学者向け講習 ... "
+    teach_user_id = 2
+    amount_of_money = 10000
+}
+
+object section1 {
+    course_id = 201
+    section_id = 301
+    section_title = "ガイダンス"
+    section_description = "ガイダンス ... "
+}
+
+object lesson1 {
+    section_id = 301
+    lesson_id = 401
+    lesson_title = "環境構築"
+    lesson_description = "環境構築 ... "
+    update_date_at = "2024-12-15"
+}
+
+object coupon1 {
+    coupon_cd = "COUPON2024"
+    coupon_name = "COUPON2024"
+    coupon_description = "クーポン ..."
+    coupon_reduced_price = null
+    coupon_reduced_percent = 10
+    coupon_max_apply = 10000
+    coupon_start_date = 2020-01-01
+    coupon_end_date = null
+    course_id = 201
+}
+
+object studentBuysCourse1 {
+    user_id = 2
+    course_id = 201
+    coupon_cd = "COUPON2024"
+    amount_of_money = 8000
+    bought_date = "2024-12-10"
+}
+
+object studentTakesInstruction1 {
+    user_id = 1
+    instruction_type = Course
+    instruction_id = 201
+    start_date = "2024-12-15"
+    complete_date = null
+}
+
+object studentTakesInstruction2 {
+    user_id = 1
+    instruction_type = Section
+    instruction_id = 301
+    start_date = "2024-12-15"
+    complete_date = null
+}
+
+object studentTakesInstruction3 {
+    user_id = 1
+    instruction_type = Lesson
+    instruction_id = 401
+    start_date = "2024-12-15"
+    complete_date = "2025-01-15"
+}
+
+' 関係定義
+user1 --> student1
+user3 --> teacher1
+company1 *-- user1
+company1 *-- user2
+company2 *-- user3
+course1 --> teacher1
+section1 o-- course1
+lesson1 o-- section1
+studentBuysCourse1 --> user2
+studentBuysCourse1 --> course1
+studentBuysCourse1 --> coupon1
+studentTakesInstruction1 --> student1
+studentTakesInstruction1 --> course1
+studentTakesInstruction2 --> student1
+studentTakesInstruction2 --> section1
+studentTakesInstruction3 --> student1
+studentTakesInstruction3 --> lesson1
+
+@enduml

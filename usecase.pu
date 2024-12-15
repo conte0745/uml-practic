@@ -1,0 +1,47 @@
+@startuml ユースケース図
+title ユースケース図
+
+left to right direction
+skinparam packageStyle rectangle
+
+actor "受講生" as Student
+actor "受講生(管理者)" as StudentAdmin
+actor "講師" as Teacher
+
+rectangle 教育システム {
+    (受講するコンテンツを選択する) as TakeCourse
+    (コースを購入する) as BuyCourse
+    (クーポンを使用する) as UseCoupon
+    (受講生のコンテンツを管理する) as ManageContent
+    (受講生を管理する) as ManageStudent
+
+    Student --> TakeCourse : 選択
+    Student --> BuyCourse : 購入
+    Student --> UseCoupon : 使用
+
+    StudentAdmin --> ManageContent : 管理
+    StudentAdmin --> ManageStudent : 管理
+    StudentAdmin --> BuyCourse : 購入
+    StudentAdmin --> UseCoupon : 使用
+
+    note right of (TakeCourse)
+        コンテンツはコース、セクション・レッスンの集合
+    end note
+
+    (コンテンツを作成する) as CreateCourse
+    (コンテンツを販売する) as SaleCourse
+    (クーポンを作成する) as CreateCoupon
+
+    note right of (CreateCourse)
+        コンテンツはコース、セクション・レッスンの集合
+    end note
+
+    CreateCourse <-- Teacher : 作成
+    SaleCourse <-- Teacher : 販売
+    CreateCoupon <-- Teacher : 作成
+
+    BuyCourse --> UseCoupon : <<extends>>
+
+}
+
+@enduml

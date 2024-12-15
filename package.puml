@@ -1,0 +1,50 @@
+@startuml パッケージ図
+title パッケージ図
+
+' アカウント管理
+package "AccountManage" {
+    [User]
+    [Student]
+    [Teacher]
+    [Company]
+}
+
+' 講座管理
+package "InstructionManage" {
+    [Course]
+    [Section]
+    [Lesson]
+    [StudentTakesInstruction]
+    [Coupon]
+}
+
+' 支払い管理
+package "BillingManage" {
+    [TransferMoneyToBank]
+    [StudentHasCoupon]
+    [StudentBuysCourse]
+}
+
+[User] --|> [Student] : 継承
+[User] --|> [Teacher] : 継承
+[Company] o-- [User] : 所属
+
+[Teacher] --> [TransferMoneyToBank] : 振込
+[Student] --> [StudentHasCoupon] : 所有
+[Student] --> [StudentBuysCourse] : 購入
+
+[Teacher] --> [Course] : 作成
+[Course] --> [Coupon]
+
+[Course] o-- [Section] : 包含
+[Section] o-- [Lesson] : 包含
+
+[Student] --> [StudentTakesInstruction] : 受講
+[StudentTakesInstruction] --> [Course]
+[StudentTakesInstruction] --> [Section]
+[StudentTakesInstruction] --> [Lesson]
+
+[Coupon] --> [StudentHasCoupon]
+[Course] --> [StudentBuysCourse]
+
+@enduml
