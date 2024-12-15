@@ -1,0 +1,15 @@
+@startuml ステートマシン図
+title coupon_state のステートマシン図
+
+[*] --> Valid : 発行
+
+Valid --> Expired : 期限切れ
+Valid --> Invalid : 無効化
+Valid --> Used : 使用済
+Invalid --> Valid : 再発行
+
+Expired --> [*] : 無効
+Invalid --> [*] : 無効
+Used --> [*] : 使用済
+
+@enduml

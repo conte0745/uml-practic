@@ -51,7 +51,7 @@ echo "$new_message" > "$message_file"
 
 ## シークレット検知
 
-### hooks/pre-commit
+### hooks/pre-commit 1
 
 ```sh
 #!/bin/sh
@@ -71,6 +71,35 @@ GREP_RESULT=$(git diff --cached --name-only | eval "grep $EXCLUDE_CMD" | xargs -
 if [ -n "$GREP_RESULT" ]; then
     echo 'AWS_ACCESS_KEY might be in this index. Please check with git diff --cached'
     echo "$GREP_RESULT"
+    exit 1
+fi
+```
+
+## コンフリクト記号検知
+
+### hooks/pre-commit 2
+
+```sh
+
+# 除外したいファイルやディレクトリをリスト化
+EXCLUDE_FILES=("git-template/git-readme.md")
+
+# Simple check for merge conflicts
+conflicts=$(git diff --cached --name-only -G"<<<<<|=====|>>>>>" )
+
+# 除外ファイルを適用
+for file in "${EXCLUDE_FILES[@]}"; do
+    conflicts=$(echo "$conflicts" | grep -v "$file")
+done
+
+# If conflicts are found
+if [ -n "$conflicts" ]; then
+    echo "未解決のコンフリクトを解消してください:"
+
+    # Loop through each conflicted file
+    for conflict in $conflicts; do
+        echo "$conflict"
+    done
     exit 1
 fi
 ```

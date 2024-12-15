@@ -1,0 +1,62 @@
+@startuml コンポーネント図
+title コンポーネント図
+
+left to right direction
+
+' 詳細な構造はわからないのでAWS環境を想定して作成
+
+frame "Global Services" {
+    [Route53]
+    [S3 : contents]
+    [S3 : sorry-page]
+    [S3 : backup]
+    [S3 : logs]
+    [Cloud Front]
+    [S3 : contents] <-[#red]- [Cloud Front] : Origin
+}
+
+frame "Application VPC" {
+
+    package "EC2 Cluster" {
+        [EC2 1 : App Server]
+        [EC2 2 : App Server]
+    }
+
+    database "RDS Cluster" {
+        [RDS primary : Write DB]
+        [RDS secondary : Read Replica]
+    }
+
+    database "Redis Cluster" {
+        [ElasticCache primary]
+        [ElasticCache secondary]
+    }
+
+    [EC2 Cluster] -[#orange]-> [Redis Cluster] : キャッシュ
+    [Session Manager] -[#green]-> [EC2 Cluster]
+    [ALB] -[#red]-> [EC2 Cluster]
+    [EC2 Cluster] -[#orange]-> [RDS Cluster]
+
+    [CloudWatch] -[hidden]-> [SNS]
+    [CloudWatch] -[hidden]-> [EC2 Cluster]
+    [CloudWatch] -[hidden]-> [RDS Cluster]
+    [CloudWatch] -[hidden]-> [Redis Cluster]
+
+    [Route53] -[#red]- [ALB]
+}
+
+[ユーザ] -[#red]-> [ALB] : リクエスト
+[ユーザ] -[#red]-> [Cloud Front] : キャッシュ
+[ALB] -[#red]-> [S3 : sorry-page]
+[社内環境] -[#green]-> [Session Manager] : Https接続
+[EC2 Cluster] -[#orange]-> [S3 : contents]
+[RDS Cluster] --> [S3 : backup]
+[CloudWatch] -[#blue]-> [S3 : logs]
+
+[CloudWatch] -[#blue]-> [EC2 Cluster] : 監視
+[CloudWatch] -[#blue]-> [RDS Cluster] : 監視
+[CloudWatch] -[#blue]-> [Redis Cluster] : 監視
+[CloudWatch] -[#blue]-> [SNS] : 購買
+[SNS] -[#blue]-> [社内環境] : 通知
+
+@enduml

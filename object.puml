@@ -87,6 +87,12 @@ object coupon1 {
     course_id = 201
 }
 
+object studentHasCoupon1 {
+    user_id = 2
+    coupon_cd = "COUPON2024"
+    coupon_state = Used
+}
+
 object studentBuysCourse1 {
     user_id = 2
     course_id = 201
@@ -95,26 +101,26 @@ object studentBuysCourse1 {
     bought_date = "2024-12-10"
 }
 
-object studentTakesInstruction1 {
+object studentTakesContents1 {
     user_id = 1
-    instruction_type = Course
-    instruction_id = 201
+    contents_type = Course
+    contents_id = 201
     start_date = "2024-12-15"
     complete_date = null
 }
 
-object studentTakesInstruction2 {
+object studentTakesContents2 {
     user_id = 1
-    instruction_type = Section
-    instruction_id = 301
+    contents_type = Section
+    contents_id = 301
     start_date = "2024-12-15"
     complete_date = null
 }
 
-object studentTakesInstruction3 {
+object studentTakesContents3 {
     user_id = 1
-    instruction_type = Lesson
-    instruction_id = 401
+    contents_type = Lesson
+    contents_id = 401
     start_date = "2024-12-15"
     complete_date = "2025-01-15"
 }
@@ -129,13 +135,14 @@ course1 --> teacher1
 section1 o-- course1
 lesson1 o-- section1
 studentBuysCourse1 --> user2
+studentHasCoupon1 --> user2
 studentBuysCourse1 --> course1
 studentBuysCourse1 --> coupon1
-studentTakesInstruction1 --> student1
-studentTakesInstruction1 --> course1
-studentTakesInstruction2 --> student1
-studentTakesInstruction2 --> section1
-studentTakesInstruction3 --> student1
-studentTakesInstruction3 --> lesson1
+studentTakesContents1 --> student1
+studentTakesContents1 --> course1
+studentTakesContents2 --> student1
+studentTakesContents2 --> section1
+studentTakesContents3 --> student1
+studentTakesContents3 --> lesson1
 
 @enduml

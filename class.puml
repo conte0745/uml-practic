@@ -66,17 +66,17 @@ class StudentBuysCourse {
     bought_date
 }
 
-class StudentTakesInstruction {
+class StudentTakesContents {
     user_id
-    instruction_type
-    instruction_id
+    contents_type
+    contents_id
     start_date
     complete_date
 }
 
-note bottom of StudentTakesInstruction
-instruction_type = {Course, Section, Lesson}
-instruction_id = {course_id, section_id, lesson_id}
+note bottom of StudentTakesContents
+contents_type = {Course, Section, Lesson}
+contents_id = {course_id, section_id, lesson_id}
 end note
 
 class Coupon {
@@ -95,7 +95,12 @@ class StudentHasCoupon {
     coupon_cd
     user_id
     is_used
+    coupon_state
 }
+
+note bottom of StudentHasCoupon
+coupon_state = {Valid, Invalid, Expired, Used}
+end note
 
 class TransferMoneyToBank {
     user_id
@@ -109,9 +114,9 @@ User <|-- Teacher
 ' コンポジション
 Company *-- User
 ' 1対N(受講生は複数のコース・セクション・レッスンを開始することができる)
-Student "1" --> "0..*" StudentTakesInstruction
+Student "1" --> "0..*" StudentTakesContents
 ' 1対N(コース・セクション・レッスンは複数の受講生が受講することができる)
-Course "1" --> "0..*" StudentTakesInstruction
+Course "1" --> "0..*" StudentTakesContents
 ' 1対N(コースは一人の講師が作成する)
 Teacher "1" --> "0..*" Course
 ' 集約(コースはセクションを持つ)

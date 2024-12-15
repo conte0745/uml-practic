@@ -10,11 +10,11 @@ package "AccountManage" {
 }
 
 ' 講座管理
-package "InstructionManage" {
+package "ContentsManage" {
     [Course]
     [Section]
     [Lesson]
-    [StudentTakesInstruction]
+    [StudentTakesContents]
     [Coupon]
 }
 
@@ -39,10 +39,10 @@ package "BillingManage" {
 [Course] o-- [Section] : 包含
 [Section] o-- [Lesson] : 包含
 
-[Student] --> [StudentTakesInstruction] : 受講
-[StudentTakesInstruction] --> [Course]
-[StudentTakesInstruction] --> [Section]
-[StudentTakesInstruction] --> [Lesson]
+[Student] --> [StudentTakesContents] : 受講
+[StudentTakesContents] --> [Course]
+[StudentTakesContents] --> [Section]
+[StudentTakesContents] --> [Lesson]
 
 [Coupon] --> [StudentHasCoupon]
 [Course] --> [StudentBuysCourse]
